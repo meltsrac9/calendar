@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Modal, Button } from 'antd';
+
 
 import "./App.css";
 
@@ -13,7 +15,7 @@ class App extends React.Component {
 
 
   onDayClick = (e, day) => {
-    alert(day);
+    this.showModal();
   }
 
   render() {

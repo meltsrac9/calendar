@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import './calendar.css';
+import { Modal, Button } from 'antd';
 
 export default class Calendar extends React.Component{
 
@@ -9,6 +10,9 @@ export default class Calendar extends React.Component{
     today: moment(),
     showMonthPopup: false,
     showYearPopup: false,
+    ModalText: 'Content of the modal',
+    visible: false,
+    confirmLoading: false,
   }
 
   constructor(props){
@@ -23,6 +27,33 @@ export default class Calendar extends React.Component{
   weekdays = moment.weekdays(); //days of the week (duh) obj
   weekdaysShort = moment.weekdaysShort(); //3 letter
   months = moment.months();
+
+//for sheduling stuff
+showModal = () => {
+   this.setState({
+     visible: true,
+   });
+ }
+
+ handleOk = () => {
+   this.setState({
+     ModalText: 'The modal will be closed after two seconds',
+     confirmLoading: true,
+   });
+   setTimeout(() => {
+     this.setState({
+       visible: false,
+       confirmLoading: false,
+     });
+   }, 2000);
+ }
+
+ handleCancel = () => {
+  console.log('Clicked cancel button');
+  this.setState({
+    visible: false,
+  });
+}
 
 //functions to retrieve day/mo/yr
 year = () => {
@@ -67,7 +98,7 @@ onDayClick = (e, day) => {
 }
 
   render(){
-
+    const { visible, confirmLoading, ModalText } = this.state; //for my modal
     let month = this.month();
 
     let weekdays = this.weekdaysShort.map((day) => {
@@ -92,7 +123,7 @@ onDayClick = (e, day) => {
       let selectedClass = (d == this.state.selectedDay ? " selected-day " : "")
       daysInMonth.push(
         <td key={d} className={className + selectedClass} >
-          <span onClick={(e)=>{this.onDayClick(e, d)}}>{d}</span>
+          <span onClick={(e)=>{this.showModal()}}>{d}</span> 
         </td>
       );
     }
@@ -131,6 +162,14 @@ onDayClick = (e, day) => {
     return(
       <div className = "calendar-container" style = {this.style}>
       <h2> {month}</h2>
+      <Modal title="Title"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleCancel}
+        >
+          <p>{ModalText}</p>
+        </Modal>
         <table className = "calendar">
           <thead>
             <tr className = "calendar-header">
