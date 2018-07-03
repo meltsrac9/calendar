@@ -51,7 +51,24 @@ firstDayOfMonth = () => {
   return firstDay;
 }
 
+schedule = () =>{
+
+  console.log(this);
+}
+
+onDayClick = (e, day) => {
+    this.setState({
+      selectedDay: day
+    }, () => {
+      console.log("SELECTED DAY: ", this.state.selectedDay);
+    });
+
+    this.props.onDayClick && this.props.onDayClick(e, day);
+}
+
   render(){
+
+    let month = this.month();
 
     let weekdays = this.weekdaysShort.map((day) => {
       return(
@@ -72,9 +89,10 @@ firstDayOfMonth = () => {
     let daysInMonth = [];
     for(let d = 1; d<= this.daysInMonth(); d++){
       let className = (d == this.currentDay() ? 'day current-day': 'day');
+      let selectedClass = (d == this.state.selectedDay ? " selected-day " : "")
       daysInMonth.push(
-        <td key = {d} className = {className}>
-          <span>{d}</span>
+        <td key={d} className={className + selectedClass} >
+          <span onClick={(e)=>{this.onDayClick(e, d)}}>{d}</span>
         </td>
       );
     }
@@ -104,7 +122,7 @@ firstDayOfMonth = () => {
 
       let trElems = rows.map((d, i) =>{
         return(
-          <tr key = {i*100}>
+          <tr key = {i*100} >
             {d}
           </tr>
         );
@@ -112,6 +130,7 @@ firstDayOfMonth = () => {
 
     return(
       <div className = "calendar-container" style = {this.style}>
+      <h2> {month}</h2>
         <table className = "calendar">
           <thead>
             <tr className = "calendar-header">
