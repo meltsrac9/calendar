@@ -10,7 +10,7 @@ export default class Calendar extends React.Component{
     today: moment(),
     showMonthPopup: false,
     showYearPopup: false,
-    ModalText: 'Content of the modal',
+    ModalText: makeEvent(),
     visible: false,
     confirmLoading: false,
   }
@@ -29,6 +29,12 @@ export default class Calendar extends React.Component{
   months = moment.months();
 
 //for sheduling stuff
+makeEvent = () => {
+  return(
+    
+    <td key = {day} className = "week-day"> {day}</td>
+  )
+}
 showModal = () => {
    this.setState({
      visible: true,
@@ -37,7 +43,7 @@ showModal = () => {
 
  handleOk = () => {
    this.setState({
-     ModalText: 'The modal will be closed after two seconds',
+     ModalText: 'You have scheduled an event',
      confirmLoading: true,
    });
    setTimeout(() => {
@@ -82,10 +88,10 @@ firstDayOfMonth = () => {
   return firstDay;
 }
 
-schedule = () =>{
-
-  console.log(this);
-}
+// schedule = () =>{
+//
+//   console.log(this);
+// }
 
 onDayClick = (e, day) => {
     this.setState({
@@ -123,7 +129,7 @@ onDayClick = (e, day) => {
       let selectedClass = (d == this.state.selectedDay ? " selected-day " : "")
       daysInMonth.push(
         <td key={d} className={className + selectedClass} >
-          <span onClick={(e)=>{this.showModal()}}>{d}</span> 
+          <span onClick={(e)=>{this.showModal()}}>{d}</span>
         </td>
       );
     }
